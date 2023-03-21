@@ -24,11 +24,21 @@ bot.hears(urlRegex, async (ctx) => {
   if (link.includes("tiktok.com")) {
     try {
       const videoData = await TikTokScraper.fetchVideo(link, true);
+      console.log(videoData);
       const videoLink = videoData.downloadURL;
-      console.l;
-      ctx.replyWithVideo(videoLink, {
-        reply_to_message_id: ctx.update.message.message_id,
-      });
+
+      console.log(videoLink);
+      ctx.replyWithVideo(
+        { url: videoLink },
+        {
+          reply_to_message_id: ctx.update.message.message_id,
+          duration: videoData.duration,
+          width: videoData.width,
+          height: videoData.height,
+          thumbnail: {url: videoData.cover},
+          supports_streaming: true
+        }
+      );
     } catch (err) {
       console.log(err);
       ctx.reply("Some error");
