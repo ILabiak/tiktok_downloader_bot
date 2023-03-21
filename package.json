@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "dotenv": "^16.0.3",
-    "telegraf": "^3.39.0"
+    "telegraf": "^3.39.0",
+    "tiktok-scraper": "^1.4.36"
   }
 }
