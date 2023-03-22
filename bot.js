@@ -7,7 +7,14 @@ const Markup = require("telegraf/markup");
 const session = require("telegraf/session");
 const TikTokScraper = require("tiktok-scraper-ts");
 
-const bot = new Telegraf(process.env.BOT_TOKEN);
+// const bot = new Telegraf(process.env.BOT_TOKEN);
+
+const bot = new Telegraf(process.env.BOT_TOKEN, {
+    telegram: {
+      apiRoot: "https://9d55-92-119-112-26.eu.ngrok.io",
+    },
+  });
+  
 
 const urlRegex =
   /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
@@ -24,10 +31,11 @@ bot.hears(urlRegex, async (ctx) => {
   if (link.includes("tiktok.com")) {
     try {
       const videoData = await TikTokScraper.fetchVideo(link, true);
-      console.log(videoData);
+    //   console.log(videoData);
       const videoLink = videoData.downloadURL;
 
-      console.log(videoLink);
+    //   console.log(videoLink);
+    console.log('sending video')
       ctx.replyWithVideo(
         { url: videoLink },
         {
@@ -45,7 +53,7 @@ bot.hears(urlRegex, async (ctx) => {
     }
     return;
   }
-  ctx.reply("got a link (not a tiktok)");
+  console.log("got a link (not a tiktok)");
 });
 
 bot.launch();
