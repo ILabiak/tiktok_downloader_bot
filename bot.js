@@ -9,12 +9,14 @@ const TikTokScraper = require("tiktok-scraper-ts");
 
 // const bot = new Telegraf(process.env.BOT_TOKEN);
 
-const bot = new Telegraf(process.env.BOT_TOKEN, {
+const bot = new Telegraf(
+  process.env.BOT_TOKEN
+  , {
     telegram: {
-      apiRoot: "https://9d55-92-119-112-26.eu.ngrok.io",
+      apiRoot: "https://60ec-92-119-112-26.eu.ngrok.io",
     },
-  });
-  
+  }
+);
 
 const urlRegex =
   /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
@@ -31,11 +33,14 @@ bot.hears(urlRegex, async (ctx) => {
   if (link.includes("tiktok.com")) {
     try {
       const videoData = await TikTokScraper.fetchVideo(link, true);
-    //   console.log(videoData);
+      // console.log(videoData)
+      if (videoData.format == undefined) {
+        console.log("No video format given");
+        return;
+      }
       const videoLink = videoData.downloadURL;
 
-    //   console.log(videoLink);
-    console.log('sending video')
+      console.log("sending video");
       ctx.replyWithVideo(
         { url: videoLink },
         {
@@ -43,8 +48,8 @@ bot.hears(urlRegex, async (ctx) => {
           duration: videoData.duration,
           width: videoData.width,
           height: videoData.height,
-          thumbnail: {url: videoData.cover},
-          supports_streaming: true
+          thumbnail: { url: videoData.cover },
+          supports_streaming: true,
         }
       );
     } catch (err) {
